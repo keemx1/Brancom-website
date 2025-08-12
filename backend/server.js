@@ -117,8 +117,22 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email and password are required' });
     }
 
-    // For now, return success (we'll add Firebase auth back later)
-    res.json({ success: true, message: 'Login endpoint working!', email });
+    // For now, create a mock user response until we set up Firebase Auth
+    // TODO: Replace with real Firebase authentication
+    const mockUser = {
+      username: email.split('@')[0], // Use email prefix as username
+      email: email,
+      id: 'mock-user-id'
+    };
+    
+    const mockToken = 'mock-jwt-token-' + Date.now(); // Mock JWT token
+    
+    res.json({ 
+      success: true, 
+      message: 'Login successful!',
+      token: mockToken,
+      user: mockUser
+    });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
@@ -133,8 +147,22 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email, password, and name are required' });
     }
 
-    // For now, return success (we'll add Firebase auth back later)
-    res.json({ success: true, message: 'Register endpoint working!', email, name });
+    // For now, create a mock user response until we set up Firebase Auth
+    // TODO: Replace with real Firebase authentication
+    const mockUser = {
+      username: name,
+      email: email,
+      id: 'mock-user-id-' + Date.now()
+    };
+    
+    const mockToken = 'mock-jwt-token-' + Date.now(); // Mock JWT token
+    
+    res.json({ 
+      success: true, 
+      message: 'Registration successful!',
+      token: mockToken,
+      user: mockUser
+    });
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
