@@ -1554,7 +1554,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const msgDiv = document.getElementById('contactFormMsg');
     msgDiv.textContent = 'Sending...';
     try {
-      const res = await fetch('http://localhost:5000/api/contact', { // Change port if needed
+      const res = await fetch('https://brancom-website-production-e6f4.up.railway.app/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

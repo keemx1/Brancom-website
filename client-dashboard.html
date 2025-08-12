@@ -249,7 +249,7 @@ document.querySelector('.login-container').addEventListener('submit', async func
   const email = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   try {
-    const res = await fetch('http://localhost:5000/api/auth/login', {
+    const res = await fetch('https://brancom-website-production-e6f4.up.railway.app/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -269,7 +269,7 @@ const token = localStorage.getItem('token');
 if (!token) window.location.href = 'client-login.html';
 </script>
 <script>
-fetch('http://localhost:5000/api/user', {
+fetch('https://brancom-website-production-e6f4.up.railway.app/api/user', {
   headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
 })
   .then(res => res.json())
@@ -401,7 +401,7 @@ fetch('http://localhost:5000/api/user', {
     });
   </script>
   <script>
-fetch('http://localhost:5000/api/billing')
+fetch('https://brancom-website-production-e6f4.up.railway.app/api/billing')
   .then(res => res.json())
   .then(data => {
     const table = document.getElementById('billingTable').querySelector('tbody');
@@ -443,7 +443,7 @@ document.querySelector('.ri-logout-box-r-line').addEventListener('click', () => 
 </script>
   <script>
 // Fetch user info and set name and profile photo
-fetch('http://localhost:5000/api/user', {
+fetch('https://brancom-website-production-e6f4.up.railway.app/api/user', {
   headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
 })
   .then(res => res.json())
