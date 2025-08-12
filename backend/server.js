@@ -16,14 +16,18 @@ const __dirname = path.dirname(__filename);
 
 // Production CORS settings
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, 'https://yourdomain.com'] 
-    : true, // Allow all origins in development
+  origin: true, // Allow all origins for now
   credentials: true
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Simple request logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
@@ -38,6 +42,11 @@ app.get('/api/health', (req, res) => {
 // Simple test endpoint
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is working!' });
+});
+
+// Simple ping endpoint for testing
+app.get('/api/ping', (req, res) => {
+  res.json({ success: true, message: 'Pong!', timestamp: new Date().toISOString() });
 });
 
 // Test contact endpoint (no email sending, just logging)
