@@ -1,39 +1,29 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "*.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/brancom main.html"
+      "source": "/",
+      "destination": "/brancom main.html"
     },
     {
-      "src": "/admin-login",
-      "dest": "/admin-login.html"
+      "source": "/admin-login",
+      "destination": "/admin-login.html"
     },
     {
-      "src": "/client-login",
-      "dest": "/client-login.html"
+      "source": "/client-login",
+      "destination": "/client-login.html"
     },
     {
-      "src": "/client-register",
-      "dest": "/client-register.html"
+      "source": "/client-register",
+      "destination": "/client-register.html"
     },
     {
-      "src": "/client-dashboard",
-      "dest": "/client-dashboard.html"
+      "source": "/client-dashboard",
+      "destination": "/client-dashboard.html"
     },
     {
-      "src": "/forgot-password",
-      "dest": "/forgot-password.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/forgot-password",
+      "destination": "/forgot-password.html"
     }
   ],
   "headers": [
