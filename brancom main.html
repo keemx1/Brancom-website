@@ -1554,7 +1554,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const msgDiv = document.getElementById('contactFormMsg');
     msgDiv.textContent = 'Sending...';
     try {
-      const res = await fetch('https://brancom-website-production-e6f4.up.railway.app/api/contact', {
+      const res = await fetch('https://brancom-website-production-e6f4.up.railway.app/api/contact-test', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

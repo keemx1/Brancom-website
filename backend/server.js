@@ -40,10 +40,25 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is working!' });
 });
 
+// Test contact endpoint (no email sending, just logging)
+app.post('/api/contact-test', (req, res) => {
+  try {
+    console.log('Contact form data received:', req.body);
+    res.json({ 
+      success: true, 
+      message: 'Test contact endpoint working!',
+      receivedData: req.body
+    });
+  } catch (error) {
+    console.error('Test contact error:', error);
+    res.status(500).json({ success: false, message: 'Test endpoint error' });
+  }
+});
+
 // Basic contact endpoint (simplified)
 app.post('/api/contact', async (req, res) => {
   try {
-    const { name, email, message, phone } = req.body;
+    const { name, email, message, phone, subject } = req.body;
     
     if (!name || !email || !message) {
       return res.status(400).json({ success: false, message: 'Name, email, and message are required' });
@@ -62,12 +77,13 @@ app.post('/api/contact', async (req, res) => {
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER, // Send to yourself
-      subject: `New Contact Form Submission from ${name}`,
+      subject: `New Contact Form Submission: ${subject || 'General Inquiry'} from ${name}`,
       html: `
         <h3>New Contact Form Submission</h3>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+        <p><strong>Subject:</strong> ${subject || 'General Inquiry'}</p>
         <p><strong>Message:</strong></p>
         <p>${message}</p>
       `
