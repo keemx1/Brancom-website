@@ -18,12 +18,22 @@ const __dirname = path.dirname(__filename);
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? [process.env.FRONTEND_URL, 'https://yourdomain.com'] 
-    : ['http://localhost:3000', 'http://localhost:5000'],
+    : true, // Allow all origins in development
   credentials: true
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Add debugging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+  console.log('Headers:', req.headers);
+  next();
+});
+
+// Handle preflight requests
+app.options('*', cors());
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
