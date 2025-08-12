@@ -43,25 +43,75 @@ app.get('/api/test', (req, res) => {
 // Basic contact endpoint (simplified)
 app.post('/api/contact', async (req, res) => {
   try {
-    res.json({ success: true, message: 'Contact endpoint working!' });
+    const { name, email, message, phone } = req.body;
+    
+    if (!name || !email || !message) {
+      return res.status(400).json({ success: false, message: 'Name, email, and message are required' });
+    }
+
+    // Create email transporter
+    const transporter = nodemailer.createTransporter({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+      }
+    });
+
+    // Email content
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: process.env.GMAIL_USER, // Send to yourself
+      subject: `New Contact Form Submission from ${name}`,
+      html: `
+        <h3>New Contact Form Submission</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+    
+    res.json({ success: true, message: 'Message sent successfully!' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Contact form error:', error);
+    res.status(500).json({ success: false, message: 'Failed to send message' });
   }
 });
 
 // Basic auth endpoints (simplified)
 app.post('/api/auth/login', async (req, res) => {
   try {
-    res.json({ success: true, message: 'Login endpoint working!' });
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: 'Email and password are required' });
+    }
+
+    // For now, return success (we'll add Firebase auth back later)
+    res.json({ success: true, message: 'Login endpoint working!', email });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
 app.post('/api/auth/register', async (req, res) => {
   try {
-    res.json({ success: true, message: 'Register endpoint working!' });
+    const { email, password, name } = req.body;
+    
+    if (!email || !password || !name) {
+      return res.status(400).json({ success: false, message: 'Email, password, and name are required' });
+    }
+
+    // For now, return success (we'll add Firebase auth back later)
+    res.json({ success: true, message: 'Register endpoint working!', email, name });
   } catch (error) {
+    console.error('Register error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
