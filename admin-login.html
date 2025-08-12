@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Brancom Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(120deg, #fff 0%, #f8f4f2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .admin-login-container {
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+      border-radius: 24px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      max-width: 370px;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .admin-login-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ED9962;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .input-group {
+      width: 100%;
+      margin-bottom: 1.2rem;
+    }
+    .input-label {
+      font-size: 0.98rem;
+      color: #1a365d;
+      margin-bottom: 0.3rem;
+      display: block;
+      font-weight: 500;
+    }
+    .input-field {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      color: #1a365d;
+      outline: none;
+    }
+    .admin-login-btn {
+      width: 100%;
+      padding: 0.9rem 0;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #ED9962 0%, #d97d44 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.2rem;
+      box-shadow: 0 2px 8px 0 rgba(237,153,98,0.10);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .admin-login-btn:hover {
+      background: linear-gradient(90deg, #d97d44 0%, #ED9962 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .error-message {
+      color: #d93025;
+      margin-top: 1rem;
+      font-size: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <form class="admin-login-container" id="adminLoginForm" autocomplete="off">
+    <div class="admin-login-title">Admin Login</div>
+    <div class="input-group">
+      <label class="input-label" for="adminEmail">Email</label>
+      <input class="input-field" type="email" id="adminEmail" name="adminEmail" required>
+    </div>
+    <div class="input-group">
+      <label class="input-label" for="adminPassword">Password</label>
+      <input class="input-field" type="password" id="adminPassword" name="adminPassword" required>
+    </div>
+    <button class="admin-login-btn" type="submit">Login</button>
+    <div id="adminErrorMessage" class="error-message"></div>
+  </form>
+  <script>
+    document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+      const errorMessage = document.getElementById('adminErrorMessage');
+      errorMessage.style.display = 'none';
+      try {
+        const res = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.message || 'Login failed');
+          return;
+        }
+        // Check if token exists
+        if (!data.token) {
+          alert('Login failed: No token received from server.');
+          return;
+        }
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userName', data.user.username);
+        window.location.href = 'client-dashboard.html';
+      } catch (err) {
+        alert('Network error: ' + err);
+      }
+    });
+  </script>
+</body>
+</html>

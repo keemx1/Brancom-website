@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brancom Client Portal - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.min.css">
+  <style>
+    :root {
+      --primary: #ED9962;
+      --primary-dark: #d97d44;
+      --input-bg: rgba(255,255,255,0.7);
+      --input-focus: #fff;
+      --font-main: 'Inter', Arial, sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: 
+        linear-gradient(120deg, rgba(255,255,255,0.85) 0%, rgba(248,244,242,0.85) 100%),
+        url('images/fibreoptics.png.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bg-tech {
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      background: url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(120deg, #fff 0%, #f8f4f2 100%);
+      opacity: 0.13;
+      pointer-events: none;
+    }
+    .login-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      max-width: 370px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1.5px solid rgba(237,153,98,0.13);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .logo {
+      width: 70px;
+      margin-bottom: 1.2rem;
+      filter: drop-shadow(0 2px 8px var(--primary));
+    }
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      letter-spacing: 0.01em;
+      text-align: center;
+    }
+    .input-group {
+      width: 100%;
+      margin-bottom: 1.2rem;
+    }
+    .input-label {
+      font-size: 0.98rem;
+      color: #1a365d;
+      margin-bottom: 0.3rem;
+      display: block;
+      font-weight: 500;
+    }
+    .input-field {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: none;
+      background: var(--input-bg);
+      box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.04);
+      font-size: 1rem;
+      color: #1a365d;
+      outline: none;
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+    .input-field:focus {
+      box-shadow: 0 0 0 2px var(--primary);
+      background: var(--input-focus);
+    }
+    .login-btn {
+      width: 100%;
+      padding: 0.9rem 0;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      margin-top: 0.2rem;
+      box-shadow: 0 2px 8px 0 rgba(237,153,98,0.10);
+      transition: background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .login-btn:hover {
+      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .login-links {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.1rem;
+      font-size: 0.97rem;
+    }
+    .login-links a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.18s;
+      font-weight: 500;
+    }
+    .login-links a:hover {
+      color: #1a365d;
+      text-decoration: underline;
+    }
+    @media (max-width: 500px) {
+      .login-container {
+        padding: 1.5rem 0.7rem 1.2rem 0.7rem;
+        max-width: 98vw;
+      }
+      .logo {
+        width: 54px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-tech"></div>
+  <form class="login-container" autocomplete="off">
+    <img src="images/bnc-logo1.png.png" alt="Brancom Logo" class="logo">
+    <div class="login-title">Client Portal Login</div>
+    <div class="input-group">
+      <label class="input-label" for="username">Email</label>
+      <input class="input-field" type="text" id="username" name="username" placeholder="Enter your email" required>
+    </div>
+    <div class="input-group" style="position:relative;">
+      <label class="input-label" for="password">Password</label>
+      <input class="input-field" type="password" id="password" name="password" placeholder="Enter your password" required>
+      <span id="togglePassword" style="position:absolute; right:16px; top:38px; cursor:pointer; font-size:1.2rem; color:#ED9962;">👁️</span>
+    </div>
+    <button class="login-btn" type="submit" aria-label="Login to your account">Login</button>
+    <div class="login-links">
+      <a href="forgot-password.html">Forgot Password?</a>
+      <a href="client-register.html" aria-label="Create a new account">Create Account</a>
+    </div>
+  </form>
+  <script>
+    document.querySelector('.login-container').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      try {
+        const res = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: username, password })
+        });
+        console.log('Response status:', res.status);
+        const text = await res.text();
+        console.log('Raw response text:', text);
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (jsonErr) {
+          alert('Failed to parse JSON: ' + jsonErr + '\nRaw response: ' + text);
+          return;
+        }
+        console.log('Parsed data:', data);
+
+        if (!res.ok) {
+          alert(data.message || 'Login failed');
+          return;
+        }
+        if (!data.token) {
+          alert('Login failed: No token received from server.');
+          return;
+        }
+        if (!data.user || !data.user.username) {
+          alert('Login failed: No user info received from server.');
+          return;
+        }
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userName', data.user.username);
+        window.location.href = 'client-dashboard.html';
+      } catch (err) {
+        alert('Network error: ' + err);
+      }
+    });
+    // Example: after successful login and receiving user data from backend
+const user = {
+  name: "Jane Doe", // This should come from your backend/database
+  // ...other user info
+};
+localStorage.setItem('userName', user.name);
+
+    // Show/hide password toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    togglePassword.addEventListener('click', function () {
+      const type = passwordInput.type === 'password' ? 'text' : 'password';
+      passwordInput.type = type;
+      togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+  </script>
+</body>
+</html> 

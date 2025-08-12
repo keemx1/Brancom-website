@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brancom Client Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #ED9962;
+      --sidebar-bg: rgba(30, 33, 40, 0.85);
+      --sidebar-glass: rgba(30, 33, 40, 0.65);
+      --card-bg: #fff;
+      --card-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.08);
+      --radius: 18px;
+      --font-main: 'Inter', Arial, sans-serif;
+      --font-display: 'Manrope', Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(120deg, #f8f8f8 0%, #f3f6fa 100%);
+      font-family: var(--font-main);
+      color: #222;
+      display: flex;
+      overflow-x: hidden;
+    }
+    .sidebar {
+      width: 80px;
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 2px 0 16px 0 rgba(31,38,135,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 0 1rem 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 10;
+    }
+    .sidebar .logo {
+      width: 44px;
+      margin-bottom: 2.5rem;
+      filter: drop-shadow(0 2px 8px var(--primary));
+    }
+    .sidebar .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+      flex: 1;
+    }
+    .sidebar .nav a {
+      color: #fff;
+      opacity: 0.8;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.18s, color 0.18s;
+      border-radius: 12px;
+      padding: 0.5rem;
+    }
+    .sidebar .nav a.active, .sidebar .nav a:hover {
+      color: var(--primary);
+      opacity: 1;
+      background: rgba(255,255,255,0.08);
+    }
+    .sidebar .bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      align-items: center;
+    }
+    .sidebar .bottom a {
+      color: #fff;
+      opacity: 0.7;
+      font-size: 1.3rem;
+      transition: color 0.18s;
+    }
+    .main {
+      margin-left: 80px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+    }
+    .topbar {
+      height: 64px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.2rem;
+      box-shadow: 0 2px 12px 0 rgba(31,38,135,0.04);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .topbar .welcome {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #222;
+      letter-spacing: -0.01em;
+    }
+    .topbar .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      cursor: pointer;
+      position: relative;
+    }
+    .topbar .profile-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+    .topbar .profile-name {
+      font-weight: 600;
+      color: #ED9962;
+      font-size: 1rem;
+    }
+    .dashboard-content {
+      padding: 2.5rem 2.5rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      background: transparent;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--card-shadow);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      position: relative;
+      min-width: 0;
+      transition: box-shadow 0.18s;
+    }
+    .card .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #ED9962;
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.01em;
+    }
+    .card .card-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 0.2rem;
+    }
+    .card .card-desc {
+      font-size: 1rem;
+      color: #888;
+    }
+    .card .card-icon {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      font-size: 2rem;
+      color: #ED9962;
+      opacity: 0.13;
+      pointer-events: none;
+    }
+    .card .countdown {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1a365d;
+      margin-top: 0.3rem;
+    }
+    .usage-graph-card {
+      grid-column: span 2;
+      min-width: 0;
+    }
+    .support-card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .support-card .support-icon {
+      font-size: 2.2rem;
+      color: #ED9962;
+      background: #fff3ed;
+      border-radius: 50%;
+      padding: 0.5rem;
+      margin-right: 0.7rem;
+    }
+    .support-card .support-info {
+      flex: 1;
+    }
+    .support-card .support-title {
+      font-weight: 600;
+      color: #ED9962;
+      font-size: 1.05rem;
+    }
+    .support-card .support-contact {
+      color: #1a365d;
+      font-size: 1rem;
+      margin-top: 0.1rem;
+    }
+    @media (max-width: 900px) {
+      .dashboard-content {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+      }
+      .cards {
+        gap: 1.1rem;
+      }
+    }
+    @media (max-width: 700px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        margin-left: 0;
+      }
+      .dashboard-content {
+        padding: 1.1rem 0.2rem 0.7rem 0.2rem;
+      }
+      .usage-graph-card {
+        grid-column: span 1;
+      }
+    }
+    .fade-in {
+      animation: fadeIn 0.7s cubic-bezier(.39,.575,.565,1) both;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<script>
+document.querySelector('.login-container').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const email = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  try {
+    const res = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.message || 'Login failed');
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userName', data.user.username); // Store the username
+    window.location.href = 'client-dashboard.html';
+  } catch {
+    alert('Network error');
+  }
+});
+</script>
+<script>
+const token = localStorage.getItem('token');
+if (!token) window.location.href = 'client-login.html';
+</script>
+<script>
+fetch('http://localhost:5000/api/user', {
+  headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+})
+  .then(res => res.json())
+  .then(user => {
+    document.getElementById('userName').textContent = user.username;
+    // You can also update profile image, email, etc. here
+  });
+</script>
+  <aside class="sidebar fade-in">
+    <img src="images/bnc-logo1.png.png" alt="Brancom Logo" class="logo">
+    <nav class="nav">
+      <a href="#" class="active" title="Dashboard"><i class="ri-dashboard-line"></i></a>
+      <a href="#" title="Billing"><i class="ri-bill-line"></i></a>
+      <a href="#" title="Usage"><i class="ri-bar-chart-2-line"></i></a>
+      <a href="#" title="Support"><i class="ri-customer-service-2-line"></i></a>
+    </nav>
+    <div class="bottom">
+      <a href="#" title="Settings"><i class="ri-settings-3-line"></i></a>
+      <a href="#" title="Logout"><i class="ri-logout-box-r-line"></i></a>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar fade-in">
+      <div class="welcome">Welcome back, <span id="userName"></span>!</div>
+      <div class="profile" tabindex="0">
+        <label for="profilePhotoInput" style="margin:0;cursor:pointer;">
+          <img id="profileImg" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-img">
+          <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+        </label>
+        <span class="profile-name" id="profileName"></span>
+        <i class="ri-arrow-down-s-line"></i>
+      </div>
+    </header>
+    <div class="dashboard-hero" style="position:relative;overflow:hidden;border-radius:18px;margin-bottom:2rem;box-shadow:0 4px 24px 0 rgba(31,38,135,0.08);">
+      <img src="images/fibreoptics.png.jpg" alt="Fiber Optic" style="width:100%;height:220px;object-fit:cover;filter:brightness(0.7);">
+      <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+        <h1 style="color:#fff;font-size:2.2rem;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,0.25);">
+          Welcome back, <span id="userNameHero"></span>!
+        </h1>
+      </div>
+    </div>
+    <section class="dashboard-content fade-in">
+      <div class="cards">
+        <div class="card">
+          <div class="card-title">🌐 Current Package</div>
+          <div class="card-value">Premium Fiber 50Mbps</div>
+          <div class="card-desc">KSH 3,000/month</div>
+          <div class="card-icon"><i class="ri-router-line"></i></div>
+        </div>
+        <div class="card">
+          <div class="card-title">🧾 Billing Details</div>
+          <div class="card-value">Last: KSH 3,000 (Apr 1)</div>
+          <div class="card-desc">Next Due: May 1, 2025</div>
+          <div class="card-icon"><i class="ri-bill-line"></i></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📅 Subscription Expiry</div>
+          <div class="countdown" id="expiryCountdown">29 days left</div>
+          <div class="card-desc">Renews automatically</div>
+          <div class="card-icon"><i class="ri-calendar-event-line"></i></div>
+        </div>
+        <div class="card support-card">
+          <div class="support-icon"><i class="ri-customer-service-2-line"></i></div>
+          <div class="support-info">
+            <div class="support-title">Need Help?</div>
+            <div class="support-contact">Call <b>0704 233 377</b> or <a href="#" style="color:var(--primary);text-decoration:underline;">Live Chat</a></div>
+          </div>
+        </div>
+        <div class="card usage-graph-card">
+          <div class="card-title">📊 Data Usage (Last 6 Months)</div>
+          <canvas id="usageChart" height="80"></canvas>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column: span 2;">
+        <div class="card-title">🧾 Billing History</div>
+        <table id="billingTable" style="width:100%;border-collapse:collapse;margin-top:1rem;">
+          <thead>
+            <tr style="background:#f8f4f2;">
+              <th style="padding:8px;text-align:left;">Date</th>
+              <th style="padding:8px;text-align:left;">Amount</th>
+              <th style="padding:8px;text-align:left;">Method</th>
+              <th style="padding:8px;text-align:left;">Invoice</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Rows will be inserted here by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script>
+    // Expiry countdown demo
+    function updateCountdown() {
+      const expiryDate = new Date('2025-05-01');
+      const now = new Date();
+      const diff = expiryDate - now;
+      const days = Math.max(0, Math.floor(diff / (1000*60*60*24)));
+      document.getElementById('expiryCountdown').textContent = days + ' days left';
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 60*60*1000);
+    // Data usage chart demo
+    const ctx = document.getElementById('usageChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+          label: 'Data Used (GB)',
+          data: [120, 135, 110, 150, 140, 160],
+          borderColor: '#ED9962',
+          backgroundColor: 'rgba(237,153,98,0.12)',
+          pointBackgroundColor: '#ED9962',
+          pointBorderColor: '#fff',
+          pointRadius: 5,
+          tension: 0.4,
+          fill: true,
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f3e7df' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
+  <script>
+fetch('http://localhost:5000/api/billing')
+  .then(res => res.json())
+  .then(data => {
+    const table = document.getElementById('billingTable').querySelector('tbody');
+    table.innerHTML = '';
+    data.invoices.forEach(inv => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td style="padding:8px;">${inv.date}</td>
+        <td style="padding:8px;">KSH ${inv.amount}</td>
+        <td style="padding:8px;">${inv.method || '—'}</td>
+        <td style="padding:8px;">
+          <a href="${inv.url}" target="_blank" style="color:#ED9962;text-decoration:underline;">View</a>
+        </td>
+      `;
+      table.appendChild(row);
+    });
+  });
+</script>
+  <script>
+document.querySelector('.ri-logout-box-r-line').addEventListener('click', () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('userName');
+  window.location.href = 'client-login.html';
+});
+</script>
+  <script>
+  // Set the welcome name in the hero banner
+  const userName = localStorage.getItem('userName') || 'Client';
+  if (document.getElementById('userNameHero')) {
+    document.getElementById('userNameHero').textContent = userName;
+  }
+  if (document.getElementById('userName')) {
+    document.getElementById('userName').textContent = userName;
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+  const userName = localStorage.getItem('userName');
+  document.getElementById('user-name').textContent = userName ? userName : "Guest";
+});
+</script>
+  <script>
+// Fetch user info and set name and profile photo
+fetch('http://localhost:5000/api/user', {
+  headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+})
+  .then(res => res.json())
+  .then(user => {
+    // Set name in all places
+    document.getElementById('userName').textContent = user.username;
+    document.getElementById('userNameHero').textContent = user.username;
+    document.getElementById('profileName').textContent = user.username;
+    localStorage.setItem('userName', user.username);
+    // Set profile photo if available
+    if (user.profilePhotoUrl) {
+      document.getElementById('profileImg').src = user.profilePhotoUrl;
+      localStorage.setItem('profilePhoto', user.profilePhotoUrl);
+    } else if (localStorage.getItem('profilePhoto')) {
+      document.getElementById('profileImg').src = localStorage.getItem('profilePhoto');
+    }
+  });
+// On page load, fallback to localStorage if fetch fails
+window.addEventListener('DOMContentLoaded', function() {
+  const userName = localStorage.getItem('userName') || 'Client';
+  if (document.getElementById('userName')) document.getElementById('userName').textContent = userName;
+  if (document.getElementById('userNameHero')) document.getElementById('userNameHero').textContent = userName;
+  if (document.getElementById('profileName')) document.getElementById('profileName').textContent = userName;
+  // Profile photo
+  const photo = localStorage.getItem('profilePhoto');
+  if (photo && document.getElementById('profileImg')) {
+    document.getElementById('profileImg').src = photo;
+  }
+});
+// Handle profile photo upload
+if (document.getElementById('profilePhotoInput')) {
+  document.getElementById('profilePhotoInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('profileImg').src = e.target.result;
+        localStorage.setItem('profilePhoto', e.target.result);
+        // TODO: Optionally upload to backend here
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+</script>
+  <div id="notificationBar" style="display:none;padding:12px 20px;background:#ED9962;color:#fff;border-radius:12px;margin-bottom:18px;font-weight:500;box-shadow:0 2px 8px rgba(237,153,98,0.10);"></div>
+</body>
+</html> 
