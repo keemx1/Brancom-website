@@ -44,8 +44,8 @@ app.post('/api/test', (req, res) => {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'briankibet61@gmail.com',      // your Gmail address
-    pass: 'hpvs obrd zvsu oqpz'     // your Gmail app password
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
   }
 });
 
@@ -54,8 +54,8 @@ app.post('/api/contact', async (req, res) => {
   const { name, email, phone, subject, message } = req.body;
 
   const mailOptions = {
-    from: '"Brancom Website" <your_email@gmail.com>',
-    to: 'briankibet61@gmail.com',
+    from: `"Brancom Website" <${process.env.GMAIL_USER || 'no-reply@brancom.com'}>`,
+    to: process.env.GMAIL_USER,
     subject: `New Contact Form Submission: ${subject}`,
     text: `
       Name: ${name}
