@@ -25,16 +25,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Add debugging middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
-  console.log('Headers:', req.headers);
-  next();
-});
-
-// Handle preflight requests
-app.options('*', cors());
-
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../')));
