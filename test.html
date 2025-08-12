@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Brancom</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .test-links a {
+            padding: 15px;
+            background: #ED9962;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .test-links a:hover {
+            background: #d97d44;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Page - Brancom</h1>
+    <p>This is a test page to check if routing is working on mobile.</p>
+    
+    <div class="test-links">
+        <a href="/client-login">Test Client Login</a>
+        <a href="/client-register">Test Client Register</a>
+        <a href="/admin-login">Test Admin Login</a>
+        <a href="/">Test Homepage</a>
+    </div>
+    
+    <p><strong>Current URL:</strong> <span id="current-url"></span></p>
+    
+    <script>
+        document.getElementById('current-url').textContent = window.location.href;
+    </script>
+</body>
+</html>

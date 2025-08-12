@@ -31,8 +31,22 @@
   to = "/forgot-password.html"
   status = 200
 
-# Handle 404 errors
+# Handle direct file access
+[[redirects]]
+  from = "/*.html"
+  to = "/:splat"
+  status = 200
+
+# Handle 404 errors - redirect to main page
 [[redirects]]
   from = "/*"
   to = "/brancom main.html"
   status = 200
+
+# Force HTTPS
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
