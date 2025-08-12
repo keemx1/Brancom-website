@@ -1,0 +1,38 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/brancom main.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin-login"
+  to = "/admin-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/client-login"
+  to = "/client-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/client-register"
+  to = "/client-register.html"
+  status = 200
+
+[[redirects]]
+  from = "/client-dashboard"
+  to = "/client-dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/forgot-password"
+  to = "/forgot-password.html"
+  status = 200
+
+# Handle 404 errors
+[[redirects]]
+  from = "/*"
+  to = "/brancom main.html"
+  status = 200
