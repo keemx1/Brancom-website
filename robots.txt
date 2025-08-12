@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://brancomgroup.co.ke/sitemap.xml
+
+# Allow all pages to be crawled
+Disallow:
+
+# Crawl delay (optional - be respectful to servers)
+Crawl-delay: 1
